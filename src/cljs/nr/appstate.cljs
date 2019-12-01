@@ -13,6 +13,7 @@
            :user (js->clj js/user :keywordize-keys true)
            :options (merge {:background "lobby-bg"
                             :show-alt-art true
+                            :large-zoom (= (get-local-value "large-zoom" "false") "true")
                             :stacked-servers (= (get-local-value "stacked-servers" "true") "true")
                             :runner-board-order (= (get-local-value "runner-board-order" "true") "true")
                             :deckstats "always"

@@ -115,6 +115,9 @@
 (defn stack-servers []
   (swap! app-state update-in [:options :stacked-servers] not))
 
+(defn large-zoom []
+  (swap! app-state update-in [:options :large-zoom] not))
+
 (defn flip-runner-board []
   (swap! app-state update-in [:options :runner-board-order] not))
 
@@ -1640,6 +1643,7 @@
         active-player (r/cursor game-state [:active-player])
         render-board? (r/track (fn [] (and corp runner side)))
         zoom-card (r/cursor app-state [:zoom])
+        large-zoom (r/cursor app-state [:options :large-zoom])
         background (r/cursor app-state [:options :background])]
 
   (go (while true
@@ -1687,10 +1691,10 @@
               [:div {:class @background}]
 
               [:div.rightpane
-               [:div.card-zoom
+               [(if @large-zoom :div.card-zoom.large :div.card-zoom)
                 [card-zoom zoom-card]]
                [card-implementation zoom-card]
-               [:div.log
+               [(if @large-zoom :div.log.large :div.log)
                 [log-pane]
                 [log-typing]
                 [log-input]]]

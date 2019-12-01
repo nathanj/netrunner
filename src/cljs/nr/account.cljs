@@ -60,6 +60,7 @@
   (swap! app-state assoc-in [:options :lobby-sounds] (:lobby-sounds @s))
   (swap! app-state assoc-in [:options :sounds-volume] (:volume @s))
   (swap! app-state assoc-in [:options :background] (:background @s))
+  (swap! app-state assoc-in [:options :large-zoom] (:large-zoom @s))
   (swap! app-state assoc-in [:options :show-alt-art] (:show-alt-art @s))
   (swap! app-state assoc-in [:options :stacked-servers] (:stacked-servers @s))
   (swap! app-state assoc-in [:options :runner-board-order] (:runner-board-order @s))
@@ -70,6 +71,7 @@
   (.setItem js/localStorage "sounds" (:sounds @s))
   (.setItem js/localStorage "lobby_sounds" (:lobby-sounds @s))
   (.setItem js/localStorage "sounds_volume" (:volume @s))
+  (.setItem js/localStorage "large-zoom" (:large-zoom @s))
   (.setItem js/localStorage "stacked-servers" (:stacked-servers @s))
   (.setItem js/localStorage "runner-board-order" (:runner-board-order @s))
   (post-options url (partial post-response s)))
@@ -130,6 +132,7 @@
 (defn account-view [user]
   (let [s (r/atom {:flash-message ""
                    :background (get-in @app-state [:options :background])
+                   :large-zoom (get-in @app-state [:options :large-zoom])
                    :sounds (get-in @app-state [:options :sounds])
                    :lobby-sounds (get-in @app-state [:options :lobby-sounds])
                    :volume (get-in @app-state [:options :sounds-volume])
@@ -193,7 +196,13 @@
                             :value true
                             :checked (:runner-board-order @s)
                             :on-change #(swap! s assoc-in [:runner-board-order] (.. % -target -checked))}]
-            "Runner rig layout is jnet-classic (Top to bottom: Programs, Hardware, Resources)"]]]
+            "Runner rig layout is jnet-classic (Top to bottom: Programs, Hardware, Resources)"]]
+          [:div
+           [:label [:input {:type "checkbox"
+                            :value false
+                            :checked (:large-zoom @s)
+                            :on-change #(swap! s assoc-in [:large-zoom] (.. % -target -checked))}]
+            "Double the size of the zoomed card image"]]]
 
          [:section
           [:h3  "Game board background"]
